@@ -1,13 +1,21 @@
 import { getVaultInstance } from '@/lib/secret-vault';
 import { NextRequest, NextResponse } from 'next/server';
 
+// Type for error object
+interface ErrorWithMessage {
+  message: string;
+}
+
 export async function GET() {
   try {
     const vault = await getVaultInstance();
     const data = await vault.readFromNodes({});
     return NextResponse.json({ data });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if ((error as ErrorWithMessage).message) {
+      return NextResponse.json({ error: (error as ErrorWithMessage).message }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Unknown error' }, { status: 500 });
   }
 }
 
@@ -21,7 +29,10 @@ export async function POST(req: NextRequest) {
     const vault = await getVaultInstance();
     await vault.writeToNodes([{ name, memo }]);
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if ((error as ErrorWithMessage).message) {
+      return NextResponse.json({ error: (error as ErrorWithMessage).message }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Unknown error' }, { status: 500 });
   }
 }
