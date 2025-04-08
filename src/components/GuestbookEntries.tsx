@@ -15,8 +15,13 @@ function getColor(name: string) {
   return color;
 }
 
+type GuestbookEntry = {
+    name: string;
+    memo: string;
+  };  
+
 export default function GuestbookEntries({ refresh }: { refresh: boolean }) {
-  const [entries, setEntries] = useState<any[]>([]);
+  const [entries, setEntries] = useState<GuestbookEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

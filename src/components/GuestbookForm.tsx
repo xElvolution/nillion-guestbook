@@ -6,7 +6,7 @@ export default function GuestbookForm({ onSuccess }: { onSuccess: () => void }) 
   const [memo, setMemo] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
